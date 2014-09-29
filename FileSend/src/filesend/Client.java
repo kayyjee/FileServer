@@ -60,7 +60,7 @@ public class Client {
 
                     sock.getOutputStream().write(msg.getBytes());
 
-                    File myFile = new File("d:Kyle.txt");
+                    File myFile = new File("d:Justin.txt");
 
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     OutputStream os = sock.getOutputStream();

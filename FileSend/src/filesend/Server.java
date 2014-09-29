@@ -19,8 +19,11 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
 
+        
         ServerSocket servsock = new ServerSocket(port);
-
+        System.out.println("Listening on Port " + port);
+        
+        
         while (true) {
             Socket sock = servsock.accept();
 
