@@ -66,7 +66,7 @@ public class Server {
         while((len = is.read(myByteArray))!= -1){
             
     
-        bos.write(myByteArray, 0, bytesRead);
+        bos.write(myByteArray);
     }
         System.out.println("File Received");
         bos.close();

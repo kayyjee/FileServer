@@ -68,7 +68,7 @@ public class Client {
                     
                     
                     File myFile = new File(userFile);
-                    byte[] mybytearray = new byte[10];
+                    byte[] mybytearray = new byte[(int)myFile.length()];
                     OutputStream os = sock.getOutputStream();
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);
