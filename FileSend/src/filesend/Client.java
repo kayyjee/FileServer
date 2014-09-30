@@ -22,9 +22,9 @@ public class Client {
         System.out.println("What is the IP Address of the Server?");
         Scanner input = new Scanner(System.in);
         String IP = input.nextLine().toString();
-        System.out.println(IP);
+        
 
-        System.out.println("Would you like to SEND or RECEIVE");
+        System.out.println("\nWould you like to SEND or RECEIVE");
         String option = input.nextLine().toString();
 
         switch (option) {
@@ -39,7 +39,7 @@ public class Client {
 
                     byte[] mybytearray = new byte[1024];
                     InputStream is = sock.getInputStream();
-                    FileOutputStream fos = new FileOutputStream("d:/Client/Output/Received-file.txt");
+                    FileOutputStream fos = new FileOutputStream("d:/Client/Output/rfile.txt");
                     System.out.println("File has been downloaded to: d:/Client/Output/");
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                     int bytesRead = is.read(mybytearray, 0, mybytearray.length);
@@ -59,18 +59,21 @@ public class Client {
                     String msg = "SEND   ";
 
                     sock.getOutputStream().write(msg.getBytes());
-
-                    File myFile = new File("d:Justin.txt");
-
+                    
+                    System.out.println("Please enter the path of the .txt file to upload: "
+                            +          "\n EX: d:/Client/FileToUpload.txt \n");
+                    
+                    String userFile = input.nextLine();
+                    
+                    
+                    
+                    File myFile = new File(userFile);
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     OutputStream os = sock.getOutputStream();
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-
                     bis.read(mybytearray, 0, mybytearray.length);
-
                     os.write(mybytearray, 0, mybytearray.length);
-                    System.out.println("File has been uploaded to: d:/Server/UploadToHere");
-
+                    
                     os.flush();
                     sock.close();
 

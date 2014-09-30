@@ -19,28 +19,22 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
 
-        
         ServerSocket servsock = new ServerSocket(port);
         System.out.println("Listening on Port " + port);
-        
-        
+
         while (true) {
             Socket sock = servsock.accept();
-
+            System.out.println("Connection Established");
+            
             byte[] msgarray = new byte[7];
 
             sock.getInputStream().read(msgarray);
-
             String readableMsg = new String(msgarray, "UTF-8");
 
             System.out.println(readableMsg);
-
-            if (readableMsg.equalsIgnoreCase("RECEIVE")) {
-                System.out.println("made it here1");
+            if (readableMsg.equals("RECEIVE")) {
                 SendToClient(sock);
             } else if (readableMsg.equals("SEND   ")) {
-
-                System.out.println("NO");
                 ReceiveFromClient(sock);
             }
         }
@@ -48,13 +42,13 @@ public class Server {
     }
 
     public static void SendToClient(Socket sock) throws IOException {
-
-        System.out.println("Made it here");
+        
         byte[] mybytearray = new byte[(int) myFile.length()];
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
         bis.read(mybytearray, 0, mybytearray.length);
         OutputStream os = sock.getOutputStream();
         os.write(mybytearray, 0, mybytearray.length);
+        System.out.println("File Sent");
         os.flush();
         sock.close();
     }
@@ -63,10 +57,11 @@ public class Server {
 
         byte[] mybytearray = new byte[1024];
         InputStream is = sock.getInputStream();
-        FileOutputStream fos = new FileOutputStream("d:/Server/UploadToHere/Received-file.zip");
+        FileOutputStream fos = new FileOutputStream("/Files/abc.txt");
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         int bytesRead = is.read(mybytearray, 0, mybytearray.length);
         bos.write(mybytearray, 0, bytesRead);
+        System.out.println("File Received");
         bos.close();
         sock.close();
 
