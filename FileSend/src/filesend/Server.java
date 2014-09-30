@@ -13,9 +13,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-
+    
     public static int port = 7005;
-    public static File myFile = new File("d:/Server/ServerFile.txt");
+    public static File myFile = new File("d:/Server/happy.mp3");
 
     public static void main(String[] args) throws IOException {
 
@@ -60,6 +60,8 @@ public class Server {
         InputStream is = sock.getInputStream();
         FileOutputStream fos = new FileOutputStream("d:/Server/UploadToHere/Happy.mp3");
         BufferedOutputStream bos = new BufferedOutputStream(fos);
+        
+        
         int bytesRead = is.read(myByteArray, 0, myByteArray.length);
         
         int len=0;
@@ -68,6 +70,7 @@ public class Server {
     
         bos.write(myByteArray);
     }
+        
         System.out.println("File Received");
         bos.close();
         sock.close();
