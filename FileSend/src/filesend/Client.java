@@ -54,17 +54,20 @@ public class Client {
                 
                 try {
                     Socket sock = new Socket(IP, 7005);
+                    //Creates a new socket on port 7006 in order to send the filename over to the server so it can GET the correct file from the Server files directory
                     Socket sock2 = new Socket (IP, 7006);
 
                     String msg = "RECEIVE";
                     String name = getFile;
 
                     sock.getOutputStream().write(msg.getBytes());
+                    //Send the file name to the Server so it can retrieve the right one.
                     sock2.getOutputStream().write(name.getBytes());
 
                     byte[] myByteArray = new byte[1];
 
                     InputStream is = sock.getInputStream();
+                    //Outputs the retrieved file to the Client Files directory under the specified name.
                     FileOutputStream fos = new FileOutputStream("./ClientFiles/" + getFile.trim());
                     System.out.println(getFile + " has been successfully received to the client files directory.");
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -99,8 +102,11 @@ public class Client {
 
                     String userFile = input.nextLine();
                     
+                    //Creates a new socket on port 7006 in order to send the filename over to the server.
                     Socket sock2 = new Socket (IP, 7006);
                     String name = userFile;
+                    
+                    //If statement to extract the file and extension from the full path.
                     //If the file path is used with back slashes
                     if(name.contains("\\")){
                         name = name.replaceAll(".*\\\\", "");
@@ -109,7 +115,6 @@ public class Client {
                         name = name.replaceAll(".*/", "");
                     }
                     //Send the file name to the Server so it can store it as such.
-                    System.out.println("File " + name + " has been sent.");
                     sock2.getOutputStream().write(name.getBytes());
                     
                     File myFile = new File(userFile);
@@ -118,7 +123,7 @@ public class Client {
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);
                     os.write(mybytearray, 0, mybytearray.length);
-
+                    System.out.println("File " + name + " has been sent.");
                     os.flush();
                     sock.close();
 

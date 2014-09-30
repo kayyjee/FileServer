@@ -27,7 +27,7 @@ public class Server {
         while (true) {
             Socket sock = servsock.accept();
             System.out.println("Connection Established");
-            
+            //Constantly wait for a connection through port 7006 and accept it right away.
             Socket sock2 = servsock2.accept();
             
             byte[] msgArray = new byte[7];
@@ -38,8 +38,11 @@ public class Server {
             String readableMsg = new String(msgArray, "UTF-8");
             readableMsg = readableMsg.trim();
             
+            
             sock2.getInputStream().read(nameArray);
+            //Converts the input stream to an array using the UTF-8 format.
             fileName = new String(nameArray, "UTF-8");
+            //Removes the extra spaces not being used of the set 50 bytes in the previously stated array.
             fileName = fileName.trim();
 
             System.out.println(readableMsg);
@@ -54,6 +57,7 @@ public class Server {
     }
 
     public static void SendToClient(Socket sock) throws IOException {
+        //Pulls the specified file from the ServerFiles directory based on the specified file name.
         File myFile = new File("./ServerFiles/" + fileName);
         byte[] mybytearray = new byte[(int) myFile.length()];
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
@@ -68,6 +72,8 @@ public class Server {
     public static void ReceiveFromClient(Socket sock) throws IOException {
         byte[] myByteArray = new byte[1];
         InputStream is = sock.getInputStream();
+        //The output directory is set to be the ServerFiles directory
+        //The output file is set to be the exact same name as the input (name and extension)
         FileOutputStream fos = new FileOutputStream("./ServerFiles/" + fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         
@@ -84,7 +90,7 @@ public class Server {
         System.out.println("File Received");
         bos.close();
         sock.close();
-
+        
     }
 
 }
