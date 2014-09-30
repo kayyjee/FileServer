@@ -19,13 +19,23 @@ public class Client {
 
     public static void main(String[] argv) throws Exception {
 
+        String option;
         System.out.println("What is the IP Address of the Server?");
         Scanner input = new Scanner(System.in);
         String IP = input.nextLine().toString();
-        
+        System.out.println("\nWould you like to SEND or RECEIVE or QUIT");
+        option = input.nextLine();
 
-        System.out.println("\nWould you like to SEND or RECEIVE");
-        String option = input.nextLine().toString();
+        do {
+            System.out.println("\nPlease enter either SEND or RECEIVE or QUIT");
+            option = input.nextLine();
+            System.out.println(option);
+
+            if ((option.equals("SEND")) || (option.equals("RECEIVE")) || (option.equals("QUIT")));
+            {
+                break;
+            }
+        } while (!option.equals("SEND") || !option.equals("RECEIVE")   || !option.equals("QUIT"));
 
         switch (option) {
             case "RECEIVE":
@@ -36,14 +46,21 @@ public class Client {
                     String msg = "RECEIVE";
 
                     sock.getOutputStream().write(msg.getBytes());
-                    
-                    byte[] mybytearray = new byte[1024];
+
+                    byte[] myByteArray = new byte[10];
+
                     InputStream is = sock.getInputStream();
-                    FileOutputStream fos = new FileOutputStream("d:/Client/Output/rfile.txt");
-                    System.out.println("File has been downloaded to: d:/Client/Output/");
+                    FileOutputStream fos = new FileOutputStream("d:/Client/Output/happy.mp3");
+
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
-                    int bytesRead = is.read(mybytearray, 0, mybytearray.length);
-                    bos.write(mybytearray, 0, bytesRead);
+                    int bytesRead = is.read(myByteArray, 0, myByteArray.length);
+
+                    int len = 0;
+                    while ((len = is.read(myByteArray)) != -1) {
+
+                        bos.write(myByteArray);
+
+                    }
                     bos.close();
                     sock.close();
                 } catch (Exception e) {
@@ -59,27 +76,28 @@ public class Client {
                     String msg = "SEND   ";
 
                     sock.getOutputStream().write(msg.getBytes());
-                    
+
                     System.out.println("Please enter the path of the .txt file to upload: "
-                            +          "\n EX: d:/Client/FileToUpload.txt \n");
-                    
+                            + "\n EX: d:/Client/FileToUpload.txt \n");
+
                     String userFile = input.nextLine();
-                    
-                    
-                    
                     File myFile = new File(userFile);
-                    byte[] mybytearray = new byte[(int)myFile.length()];
+                    byte[] mybytearray = new byte[(int) myFile.length()];
                     OutputStream os = sock.getOutputStream();
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);
                     os.write(mybytearray, 0, mybytearray.length);
-                    
+
                     os.flush();
                     sock.close();
 
                 } catch (Exception e) {
                 }
                 break;
+             
+        case "QUIT": 
+            System.out.println("Goodbye");
+            System.exit(0);
         }
 
     }
