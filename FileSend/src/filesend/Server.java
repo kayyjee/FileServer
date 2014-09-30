@@ -15,26 +15,37 @@ import java.net.Socket;
 public class Server {
     
     public static int port = 7005;
-    public static File myFile = new File("d:/Server/happy.mp3");
+    static String fileName;
 
     public static void main(String[] args) throws IOException {
 
         ServerSocket servsock = new ServerSocket(port);
         System.out.println("Listening on Port " + port);
+        
+        ServerSocket servsock2 = new ServerSocket(7006);
 
         while (true) {
             Socket sock = servsock.accept();
             System.out.println("Connection Established");
             
-            byte[] msgarray = new byte[7];
+            Socket sock2 = servsock2.accept();
+            
+            byte[] msgArray = new byte[7];
+            //Allows for a file name to be up to 50 characters (including extension)
+            byte[] nameArray = new byte[50];
 
-            sock.getInputStream().read(msgarray);
-            String readableMsg = new String(msgarray, "UTF-8");
+            sock.getInputStream().read(msgArray);
+            String readableMsg = new String(msgArray, "UTF-8");
+            readableMsg = readableMsg.trim();
+            
+            sock2.getInputStream().read(nameArray);
+            fileName = new String(nameArray, "UTF-8");
+            fileName = fileName.trim();
 
             System.out.println(readableMsg);
             if (readableMsg.equals("RECEIVE")) {
                 SendToClient(sock);
-            } else if (readableMsg.equals("SEND   ")) {
+            } else if (readableMsg.equals("SEND")) {
                 ReceiveFromClient(sock);
             }
             break;
@@ -43,7 +54,7 @@ public class Server {
     }
 
     public static void SendToClient(Socket sock) throws IOException {
-        
+        File myFile = new File("./ServerFiles/" + fileName);
         byte[] mybytearray = new byte[(int) myFile.length()];
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
         bis.read(mybytearray, 0, mybytearray.length);
@@ -55,10 +66,9 @@ public class Server {
     }
 
     public static void ReceiveFromClient(Socket sock) throws IOException {
-
-        byte[] myByteArray = new byte[10];
+        byte[] myByteArray = new byte[1];
         InputStream is = sock.getInputStream();
-        FileOutputStream fos = new FileOutputStream("d:/Server/UploadToHere/Happy.mp3");
+        FileOutputStream fos = new FileOutputStream("./ServerFiles/" + fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         
         

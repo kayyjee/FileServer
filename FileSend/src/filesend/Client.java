@@ -23,11 +23,9 @@ public class Client {
         System.out.println("What is the IP Address of the Server?");
         Scanner input = new Scanner(System.in);
         String IP = input.nextLine().toString();
-        System.out.println("\nWould you like to SEND or RECEIVE or QUIT");
-        option = input.nextLine();
 
         do {
-            System.out.println("\nPlease enter either SEND or RECEIVE or QUIT");
+            System.out.println("\nWould you like to SEND or RECEIVE or QUIT");
             option = input.nextLine();
             System.out.println(option);
 
@@ -39,19 +37,36 @@ public class Client {
 
         switch (option) {
             case "RECEIVE":
-
+                
+                File folder = new File("./ServerFiles/");
+                File[] listOfFiles = folder.listFiles();
+                
+                System.out.println("\nList of all the current server files");
+                
+                for (File listOfFile : listOfFiles) {
+                    if (listOfFile.isFile()) {
+                        System.out.println("File: " + listOfFile.getName());
+                    }
+                }
+                
+                System.out.println("\nWhich file would you like to receive? (filename and extention)");
+                String getFile = input.nextLine().toString();
+                
                 try {
                     Socket sock = new Socket(IP, 7005);
+                    Socket sock2 = new Socket (IP, 7006);
 
                     String msg = "RECEIVE";
+                    String name = getFile;
 
                     sock.getOutputStream().write(msg.getBytes());
+                    sock2.getOutputStream().write(name.getBytes());
 
-                    byte[] myByteArray = new byte[10];
+                    byte[] myByteArray = new byte[1];
 
                     InputStream is = sock.getInputStream();
-                    FileOutputStream fos = new FileOutputStream("d:/Client/Output/happy.mp3");
-
+                    FileOutputStream fos = new FileOutputStream("./ClientFiles/" + getFile.trim());
+                    System.out.println(getFile + " has been successfully received to the client files directory.");
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                     int bytesRead = is.read(myByteArray, 0, myByteArray.length);
 
@@ -74,13 +89,29 @@ public class Client {
                     Socket sock = new Socket(IP, 7005);
 
                     String msg = "SEND   ";
-
+                    
+                    
                     sock.getOutputStream().write(msg.getBytes());
 
-                    System.out.println("Please enter the path of the .txt file to upload: "
-                            + "\n EX: d:/Client/FileToUpload.txt \n");
+
+                    System.out.println("Please enter the path of the file to send: "
+                            + "\n EX: D:/Client/FileToUpload.txt \n");
 
                     String userFile = input.nextLine();
+                    
+                    Socket sock2 = new Socket (IP, 7006);
+                    String name = userFile;
+                    //If the file path is used with back slashes
+                    if(name.contains("\\")){
+                        name = name.replaceAll(".*\\\\", "");
+                    } else { 
+                        //If the file path is used with forward slashes
+                        name = name.replaceAll(".*/", "");
+                    }
+                    //Send the file name to the Server so it can store it as such.
+                    System.out.println("File " + name + " has been sent.");
+                    sock2.getOutputStream().write(name.getBytes());
+                    
                     File myFile = new File(userFile);
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     OutputStream os = sock.getOutputStream();
