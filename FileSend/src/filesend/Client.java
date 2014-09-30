@@ -36,7 +36,7 @@ public class Client {
                     String msg = "RECEIVE";
 
                     sock.getOutputStream().write(msg.getBytes());
-
+                    
                     byte[] mybytearray = new byte[1024];
                     InputStream is = sock.getInputStream();
                     FileOutputStream fos = new FileOutputStream("d:/Client/Output/rfile.txt");
@@ -68,7 +68,7 @@ public class Client {
                     
                     
                     File myFile = new File(userFile);
-                    byte[] mybytearray = new byte[(int) myFile.length()];
+                    byte[] mybytearray = new byte[10];
                     OutputStream os = sock.getOutputStream();
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);

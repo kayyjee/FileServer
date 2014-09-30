@@ -37,6 +37,7 @@ public class Server {
             } else if (readableMsg.equals("SEND   ")) {
                 ReceiveFromClient(sock);
             }
+            break;
         }
 
     }
@@ -55,12 +56,18 @@ public class Server {
 
     public static void ReceiveFromClient(Socket sock) throws IOException {
 
-        byte[] mybytearray = new byte[1024];
+        byte[] myByteArray = new byte[10];
         InputStream is = sock.getInputStream();
-        FileOutputStream fos = new FileOutputStream("/Files/abc.txt");
+        FileOutputStream fos = new FileOutputStream("d:/Server/UploadToHere/Happy.mp3");
         BufferedOutputStream bos = new BufferedOutputStream(fos);
-        int bytesRead = is.read(mybytearray, 0, mybytearray.length);
-        bos.write(mybytearray, 0, bytesRead);
+        int bytesRead = is.read(myByteArray, 0, myByteArray.length);
+        
+        int len=0;
+        while((len = is.read(myByteArray))!= -1){
+            
+    
+        bos.write(myByteArray, 0, bytesRead);
+    }
         System.out.println("File Received");
         bos.close();
         sock.close();
